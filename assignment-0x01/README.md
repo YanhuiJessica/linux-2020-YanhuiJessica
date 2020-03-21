@@ -12,6 +12,14 @@
 
 - 镜像：`ubuntu-18.04.4-server-amd64.iso`
 - 网卡：NAT 网络 + Host-Only
+- Host-Only IP：192.168.56.13/24
+
+### AC-Kali
+
+- 镜像：`kali-linux-2019.3-amd64.iso`
+- 网卡：NAT 网络 + Host-Only
+- Host-Only IP：192.168.56.3/24
+- 用途：SSH 跳板机
 
 ## 实验过程
 
@@ -52,6 +60,8 @@
     ```
 - 之后连接 AC-Server 就不再需要输入密码了<br>
 ![SSH 免密登录](img/no-passwd.jpg)
+- PS：如果连接不上，需要修改目标主机`/etc/ssh/sshd_config`文件哦 :)
+  - 值得注意的修改项：PermitRootLogin, PubkeyAuthentication
 
 ### 定制镜像
 
@@ -169,6 +179,24 @@ stretch|bionic|[18.04 "Bionic"series](https://launchpad.net/ubuntu/bionic)
 `#d-i pkgsel/upgrade select none`|`d-i pkgsel/upgrade select none`|安装完成后禁止自动升级包
 `#d-i pkgsel/update-policy select none`|`d-i pkgsel/update-policy select unattended-upgrades`|自动安装安全类更新
 
+### SSH 跳板登录
+
+- SSH 跳板登录示意图<br>
+![通过 AC-Kali 建立与 AC-Server 的连接](img/ssh-login.jpg)
+- 跳板机和目标主机均需要存有宿主机的公钥
+- 使用`ssh -J root@192.168.56.3 yanhui@192.168.56.13`命令就可以一步通过跳板机直接到目标主机了 XD
+  > -J [user@]host[:port] Connect to the target host by first making a ssh connection to the pjump host[(/iam/jump-host) and then establishing a TCP forwarding to the ultimate destination from there.
+- 目标主机打开防火墙，防止宿主机『一步登天』
+  ```bash
+  # 只允许来自跳板机的 SSH 连接
+  iptables -A INPUT -p tcp -s 192.168.56.3 --dport 22 -j ACCEPT
+  iptables -A INPUT -p tcp -s 0.0.0.0/0 --dport 22 -j DROP
+  ```
+  ![无法直接使用 SSH 连接](img/can-not-directly-ssh.jpg)
+- 通过跳板机，宿主机成功连接上目标主机<br>
+
+  <img src="img/jump-ssh.jpg" alt="通过跳板机连接" width=700>
+
 ## 其它问题
 
 ### SCP vs SFTP
@@ -193,3 +221,5 @@ stretch|bionic|[18.04 "Bionic"series](https://launchpad.net/ubuntu/bionic)
 - [Ssh-copy-id for copying SSH keys to servers - SSH.com](https://www.ssh.com/ssh/copy-id)
 - [mount(8): mount filesystem - Linux man page](https://linux.die.net/man/8/mount)
 - [Appendix B. Automating the installation using preseeding](https://help.ubuntu.com/lts/installation-guide/amd64/apb.html)
+- [can't ssh into remote host with root, password incorrect](https://unix.stackexchange.com/questions/79449/cant-ssh-into-remote-host-with-root-password-incorrect)
+- [SSH Command](https://www.ssh.com/ssh/command)
