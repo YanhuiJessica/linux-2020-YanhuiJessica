@@ -196,6 +196,8 @@ stretch|bionic|[18.04 "Bionic"series](https://launchpad.net/ubuntu/bionic)
 - 通过跳板机，宿主机成功连接上目标主机<br>
 
   <img src="img/jump-ssh.jpg" alt="通过跳板机连接" width=700>
+- 如果跳板机挂掉了，连接会中断噢 XD<br>
+![SSH 连接中断](img/break-ssh.jpg)
 
 ## 其它问题
 
