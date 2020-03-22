@@ -149,15 +149,25 @@ mkisofs -r -V "Custom Ubuntu Install CD" \
 # Windows 10 WSL
 scp yanhui@192.168.56.13:~/cd/custom.iso .
 ```
+整个安装过程持续约 10 分钟，视频长度约 1 分钟。[点击查看视频](https://pan.baidu.com/s/1NRk1aBFq6DEKG5QX3aSzcg)<br>
 
 <img src="img/unattended-install.gif" alt="无人值守安装过程" width=700>
 
 输入预先设定的用户名和密码即可进入<br>
-![用户登录](img/cuc-login.jpg)
+![用户登录](img/cuc-login.jpg)<br>
+安装完毕后配置的网络即生效，并且可以上网<br>
+![网络状况](img/network-status.jpg)
 
 ### 分析比较
 
-- 使用在线的文本比较工具就能很轻松的进行比对，这里附上比对结果：https://www.diffchecker.com/mAaz6pXz
+- 使用在线的文本比较工具就能很轻松的进行比对，这里附上比对结果：https://www.diffchecker.com/efZ7XlZO
+- 在 SHELL 中可以使用`vimdiff`进行文本差异比对：`vimdiff left_file right_file`
+
+  <img src="img/vimdiff-part.jpg" alt="vimdiff 界面展示" width=700><br>
+  - 在两个文本间切换使用`(ctrl + W) + W`
+  - 可以很方便的将差异句统一为某一个文本的内容，使用`dp`（把当前文件内容推到对面文件）或`do`（把对面文件内容拉到当前文件）命令
+
+
 - 主要改动及意义
 
 修改前 | 修改后 | 意义 / 作用
@@ -166,7 +176,7 @@ stretch|bionic|[18.04 "Bionic"series](https://launchpad.net/ubuntu/bionic)
 `#d-i debian-installer/language string en`<br>`#d-i debian-installer/country string NL`<br>`#d-i debian-installer/locale string en_GB.UTF-8`<br>`#d-i localechooser/supported-locales multiselect en_US.UTF-8, nl_NL.UTF-8`|`d-i debian-installer/language string en`<br>`d-i debian-installer/country string CN`<br>`d-i debian-installer/locale string en_US.UTF-8`<br>`d-i localechooser/supported-locales multiselect en_US.UTF-8,zh_CN.UTF-8`| 选择国家地区语言
 `#d-i netcfg/link_wait_timeout string 10`|`d-i netcfg/link_wait_timeout string 1`|将链路检测等待超时时间缩短为1秒（默认为3秒）
 `#d-i netcfg/dhcp_timeout string 60`|`d-i netcfg/dhcp_timeout string 5`|将等待DHCP服务器超时时间缩短为5秒
-`#d-i netcfg/disable_autoconfig boolean true`|`d-i netcfg/disable_autoconfig boolean true`|手动配置网络
+`#d-i netcfg/disable_autoconfig boolean true`|`d-i netcfg/disable_autoconfig boolean true`|手动配置网络（配置文件`# IPv4 example`下紧跟网络设置，包括 IP 地址、网关、域名解析服务器，虚拟机网卡：NAT 网络）
 `d-i netcfg/get_hostname string unassigned-hostname`<br>`d-i netcfg/get_domain string unassigned-domain`|`d-i netcfg/get_hostname string CUC-Server`<br>`d-i netcfg/get_domain string cuc.edu.cn`|设置主机名和域名（从 DHCP 分配的任何主机名和域名都优先于此处设置的值）
 `#d-i netcfg/hostname string somehost`|`d-i netcfg/hostname string cucserver`|强制设置主机名为`cucserver`
 `#d-i passwd/user-fullname string Ubuntu User`<br>`#d-i passwd/username string ubuntu`<br>`#d-i passwd/user-password password insecure`<br>`#d-i passwd/user-password-again password insecure`<br>`#d-i user-setup/allow-password-weak boolean true`|`d-i passwd/user-fullname string CUC User`<br>`d-i passwd/username string cuc`<br>`d-i passwd/user-password password resu`<br>`d-i passwd/user-password-again password resu`<br>`d-i user-setup/allow-password-weak boolean true`|创建普通用户，设置用户名及密码并确认为弱密钥
