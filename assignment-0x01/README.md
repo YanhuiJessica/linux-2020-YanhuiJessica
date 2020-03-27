@@ -2,9 +2,13 @@
 
 ## 实验要求
 
-- [x] 定制一个普通用户名和默认密码
-- [x] 定制安装 OpenSSH Server
-- [x] 安装过程禁止自动联网更新软件包
+- [x] 配置无人值守安装 iso
+  - [x] 定制一个普通用户名和默认密码
+  - [x] 定制安装 OpenSSH Server
+  - [x] 安装过程禁止自动联网更新软件包
+- [x] 在 Virtualbox 中完成自动化安装
+- [x] [Virtualbox 安装完 Ubuntu 之后新添加的网卡实现系统开机自动启用和自动获取IP](#网络配置)
+- [x] 使用`sftp`在虚拟机和宿主机之间传输文件
 
 ## 实验环境
 
@@ -62,6 +66,35 @@
 ![SSH 免密登录](img/no-passwd.jpg)
 - PS：如果连接不上，需要修改目标主机`/etc/ssh/sshd_config`文件哦 :)
   - 值得注意的修改项：PermitRootLogin, PubkeyAuthentication
+
+### SFTP 的使用
+
+- 【注】实验中使用的是方便表述的非交互式命令`scp`
+- 以下命令参考`tldr` XD
+  ```bash
+  # 使用宿主机连接虚拟机
+  # Windows 10 WSL
+  sftp yanhui@192.168.56.13
+
+  # 通过非默认端口连接
+  # sftp -P 2222 yanhui@192.168.56.13
+
+  # 将虚拟机（远程）的文件传输至宿主机
+  # 连接后所在远程当前目录为~
+  get cd/custom.iso
+
+  # 将宿主机的文件传输至虚拟机（远程）
+  put /mnt/f/ubuntu-18.04.4-server-amd64.iso
+  # 传输到~目录下
+
+  # 查看宿主机的文件列表
+  lls
+
+  # 查看虚拟机（远程）的文件列表
+  ls
+  ```
+
+![sftp 使用](img/sftp.jpg)
 
 ### 定制镜像
 
@@ -218,6 +251,7 @@ stretch|bionic|[18.04 "Bionic"series](https://launchpad.net/ubuntu/bionic)
 - `scp`和`sftp`均基于 SSH，并提供相同的安全功能
 - `sftp`除实现了安全传输文件的功能，还有查看/搜索目录、创建/组织文件、删除或重命名文件等功能，`scp`仅安全的传输文件这一项功能
 - `scp`和`sftp`都没有传输文件大小的限制，但`scp`传输速度可能受到文件大小的影响
+- `scp`是非交互式的，`sftp`是交互式的（tldr）
 - 实际使用哪个命令，可根据具体需求来决定
 - 参考：[SCP or SFTP: Which is Better?](https://www.cerberusftp.com/comparing-scp-vs-sftp-which-is-better/)
 
@@ -227,6 +261,11 @@ stretch|bionic|[18.04 "Bionic"series](https://launchpad.net/ubuntu/bionic)
 ```bash
 :set paste
 ```
+
+## 实验总结
+
+- `vimdiff`是本地文本比较的利器！XD
+- 使用『无人值守』装机可以安心摸鱼啦~（好像，多重加载更快哦？XD）
 
 ## 参考资料
 
