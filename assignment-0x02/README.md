@@ -3,6 +3,8 @@
 ## 实验要求
 
 - [x] vimtutor 操作全程录像
+- [x] 描述环境
+- [x] 目录下文本查找
 
 ## 实验环境
 
@@ -147,6 +149,60 @@ Normal 模式下，输入`:!`，其后跟随需要执行的外部程序的指令
   - `:help c_<Shortcut>` 查询 Command-line 模式下的快捷键
   - `:help v_<Shortcut>` 查询 Visual 模式下的快捷键
 - 在两个不同的分屏窗口中移动光标：`CTRL-W CTRL-W`
+
+## 描述环境
+
+### 软件相关
+
+- 操作系统发行版和内核信息
+  - `lsb_release -a` / `cat /etc/*-release` 查看发行版本
+  - `uname -a` 查看内核信息
+- 系统中当前有谁在线（非本地）
+  - `w`/`who`
+- 现在在运行的进程有哪些
+  - `pstree`/`ps aux`
+- 哪些进程在监听哪些端口
+  ```bash
+  netstat -ltpn
+  # -l display listening server sockets
+  # -t List listening TCP ports
+  # -p Display PID and program names
+  # -n don't resolve names
+
+  lsof
+  ```
+- 挂载点和文件系统
+  - `mount`
+  - `hier`
+- 已安装应用软件列表、故障或问题发生前最近新安装的软件信息
+  - 已安装应用软件列表：`dpkg -l`
+  - `/var/log/dpkg.log`
+- 系统环境变量、当前用户环境变量
+  - 系统环境变量：`/etc/environment`
+  - 当前用户环境变量：`env` / `printenv`
+- 故障/问题发生前后邻近的系统日志、应用程序日志等
+  - `/var/log/`
+- 系统自启动项有哪些，自启动机制分别是什么；系统定时任务有哪些，触发机制分别是什么
+  - `systemctl list-unit-files --type=service`
+    - static / enabled / disabled / masked
+  - `ls /etc/cron*`
+- 出问题应用程序的当前环境变量设置情况等
+  - `env` / `printenv`
+- 当前系统中哪些应用程序/进程在占用网络带宽？
+  - `top`
+
+### 网络相关
+
+- 系统的 IP 地址、MAC 地址信息
+  - `ip a`
+- ARP 表 / 路由表 / hosts 文件配置 / DNS 服务器配置
+  - `ip neigh` / `ip route` / `/etc/hosts` / `/etc/resolv.conf`
+- 防火墙规则表
+  - `iptables`
+
+### 硬件相关
+
+- 获得硬件信息：`report-hw`
 
 ## 常用 Linux 命令
 
@@ -385,6 +441,8 @@ tmux # 开启一个新的窗口
 Ctrl+B d
 # 删除当前会话
 Ctrl+D
+# 或
+exit
 
 # 查看当前所有 tmux 会话
 tmux ls
@@ -469,5 +527,6 @@ command -v
 - [Asciinema - Getting started](https://asciinema.org/docs/getting-started)
 - [Vim documentation: intro](http://vimdoc.sourceforge.net/htmldoc/intro.html#vim-modes-intro)
 - [Repeating characters in VIM insert mode](https://stackoverflow.com/questions/5054128/repeating-characters-in-vim-insert-mode)
+- [System-wide environment variables](https://help.ubuntu.com/community/EnvironmentVariables#System-wide_environment_variables)
 - [How to tell the difference between apt-get upgrade, apt-get dist-upgrade, and do-release-upgrade](https://www.techrepublic.com/article/how-to-tell-the-difference-between-apt-get-upgrade-apt-get-dist-upgrade-and-do-release-upgrade/)
 - ['sudo su -' vs 'sudo -i' vs 'sudo /bin/bash' - when does it matter which is used, or does it matter at all?](https://askubuntu.com/questions/376199/sudo-su-vs-sudo-i-vs-sudo-bin-bash-when-does-it-matter-which-is-used)
