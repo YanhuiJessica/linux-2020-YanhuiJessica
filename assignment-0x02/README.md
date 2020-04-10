@@ -376,6 +376,28 @@ Ctrl + C # 终止进程
 Ctrl + Z # 挂起进程
 ```
 
+#### 多窗口
+
+```bash
+tmux # 开启一个新的窗口
+
+# 将当前窗口放入后台运行
+Ctrl+B d
+# 删除当前会话
+Ctrl+D
+
+# 查看当前所有 tmux 会话
+tmux ls
+
+tmux attach-session # 接入最近使用的会话
+tmux attach-session -t {{name}} # 接入某个特定的会话
+
+# 杀掉某个特定会话
+tmux kill-session -t {{name}}
+```
+
+![tmux 使用示例](img/tmux.gif)
+
 ### 目录管理
 
 ```bash
