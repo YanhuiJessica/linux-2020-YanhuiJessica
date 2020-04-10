@@ -2,7 +2,7 @@
 
 ## 实验要求
 
-vimtutor 操作全程录像
+- [x] vimtutor 操作全程录像
 
 ## 实验环境
 
@@ -10,6 +10,10 @@ vimtutor 操作全程录像
 
 - 镜像：`ubuntu-18.04.4-server-amd64.iso`
 - 网卡：NAT 网络 + Host-Only
+
+### LAPTOP-2AHLJ65D
+
+- Windows 10 WSL
 
 ### asciinema
 
@@ -144,8 +148,304 @@ Normal 模式下，输入`:!`，其后跟随需要执行的外部程序的指令
   - `:help v_<Shortcut>` 查询 Visual 模式下的快捷键
 - 在两个不同的分屏窗口中移动光标：`CTRL-W CTRL-W`
 
+## 常用 Linux 命令
+
+### 软件包管理
+
+```bash
+# 源列表
+/etc/apt/sources.list
+```
+
+#### 更新
+
+```bash
+# 使用源列表中定义的镜像源地址更新本地可用软件包信息数据库
+# 并不会安装或更新任何软件
+apt update
+
+# 根据本地的可用软件包信息数据库文件内容更新安装当前系统中所有已安装软件的版本
+# 不会删除软件包
+apt upgrade
+
+# 更新已安装软件并解决依赖问题
+# 可能会删除软件包
+apt dist-upgrade
+
+# 对 apt-get 进行封装的一个更友好、更易用（主要体现在自动解决软件依赖 bug 上）包管理工具
+aptitude  # 需安装
+```
+
+#### 查找与信息查看
+
+```bash
+# 查看软件包本地版本以及远程镜像仓库版本（是否 apt update 可能会影响）
+apt policy packagename
+
+# 查找应用程序所在的软件包
+apt-cache search appname
+# e.g. apt-cache search mkisofs
+
+# 查看该软件包依赖哪些独立软件包
+apt-cache depends packageanme
+
+# 查看软件包的详细信息
+apt show packagename
+
+# 列举与软件包相关的文件
+dpkg -L packagename
+```
+
+#### 删除
+
+```bash
+# 删除已安装软件包但不删除配置文件
+apt remove
+
+# 删除已安装软件包和配置文件
+apt purge
+
+# 删除 /var/cache/apt/archives/ 和 /var/cache/apt/archives/partial/
+# 目录下除了 lock 文件之外的所有已下载（软件包）文件
+apt clean
+```
+
+### 文件管理
+
+#### 查看
+
+```bash
+# 查看当前工作目录
+pwd
+
+# 查看隐藏文件（文件名以 . 开头）
+ls -a
+
+# 列举文件并显示详细信息
+ls -l
+
+# 显示文件属性，如大小，所属用户，修改时间等
+stat filename
+```
+
+#### 修改
+
+```bash
+# 创建一个新文件或将已存在文件的时间修改为当前时间
+touch filename
+
+# 将文件时间修改为一个特定的日期和时间
+touch -t {{YYYYMMDDHHMM.SS}} filename
+
+# 使用文件 1 的时间来设置文件 2 的时间
+touch -r filename1 filename2
+
+# Access：最后一次访问文件的时间（不一定会更新，频繁更新会导致磁盘 I/O 下降等问题）
+# Modify：最后一次修改文件的时间
+# Change：最后一次修改文件属性的时间
+```
+touch 使用示例：<br>
+
+<img src="img/touch.gif" alt="touch 使用示例" width=600px>
+
+```bash
+# 删除文件
+rm filename
+
+# 覆盖一个文件，安全处理
+shred filename
+```
+`shred`前：<br>
+![shred 处理前文件](img/before-shred.jpg)<br>
+`shred`后：<br>
+![shred 处理后文件](img/after-shred.jpg)
+
+#### 其他
+
+```bash
+# 创建软链接
+ln -s {{path/to/file_or_directory}} {{path/to/symlink}}
+
+# 将已有软链接指向另一个文件
+ln -sf {{path/to/new_file}} {{path/to/symlink}}
+
+# 创建硬链接
+ln {{path/to/file}} {{path/to/hardlink}}
+
+# 根据扩展名查找文件
+find {{root_path}} -name '{{*.ext}}'
+
+# 找到匹配后执行命令
+# 每个文件执行一条命令使用 {}
+find {{root_path}} -name '{{*.ext}}' -exec {{command {}}} \;
+```
+
+### 文本处理
+
+```bash
+# 不断读取并显示文件最后的部分，直到 CTRL-C
+tail -F {{file}}
+
+# 显示文件的开头部分
+head
+
+# 以冒号作为分隔符，分割并输出第 1,6 列
+cut -d ":" -f 1,6
+
+# 大小写转换
+echo "hello world" | tr [:lower:] [:upper:]
+
+# 删除指定字符
+echo "hello world" | tr -d h
+
+# 字母替换
+echo "hello world" | tr o a
+
+# 行数统计
+wc -l
+
+# 词数统计
+wc -w
+
+# 字节数、字符数统计
+wc -c
+```
+
+- 查找并统计某函数在整个“项目”（以 [Syntax-Analysis](https://github.com/YanhuiJessica/Syntax-Analysis) 为例）中被调用次数，并输出在哪些文件、具体哪些行中调用到了该函数
+  - 被调用次数：
+    ```bash
+    find Syntax-Analysis/ -name "*.py" | xargs grep "setStart" | grep -v "def" | wc -l
+    # 3
+    ```
+  - 在哪些文件、具体哪些行：
+    ```bash
+    find Syntax-Analysis/ -name "*.py" | xargs grep -n "setStart" | grep -v "def"
+    # Syntax-Analysis/LR.py:48:        self.setStart('S\'')
+    # Syntax-Analysis/LR.py:107:        self.dfa.setStart(0)
+    # Syntax-Analysis/LR.py:430:        self.dfa.setStart(0)
+    ```
+- 在整个目录中查找某关键词出现在哪些文件的哪些行
+  ```bash
+  find Syntax-Analysis/ -name "*.py" | xargs grep -n "setStart"
+  # Syntax-Analysis/FiniteAutomata.py:18:    def setStart(self, state):
+  # Syntax-Analysis/LR.py:19:    def setStart(self, startsy):
+  # Syntax-Analysis/LR.py:48:        self.setStart('S\'')
+  # Syntax-Analysis/LR.py:107:        self.dfa.setStart(0)
+  # Syntax-Analysis/LR.py:430:        self.dfa.setStart(0)
+  ```
+- 删除C语言编写项目中的所有注释行（单行）：`grep -v "^//" {{infile}} > {{outfile}}`
+
+### 文件压缩与解压缩
+
+```bash
+# 处理文件解压乱码
+# -O 指定编码方案
+unzip -O cp936 test.zip
+```
+
+### 进程管理
+
+```bash
+# 查看当前所有进程
+ps aux
+
+# 查看进程树
+pstree
+
+# 查看进程 PID
+pidof
+
+# 类似于 tasklist
+top
+
+# 改进的交互式系统信息查看器
+htop
+
+# 杀进程
+kill # 发送终止信号
+kill -9 # 发送强制终止信号
+kill -s N # 发送指定信号
+killall <process_imagename>
+
+& # 将进程放到后台执行
+
+fg # 将最近挂起的后台作业置于前台
+bg # 恢复最近挂起的作业并在后台运行它
+
+Ctrl + C # 终止进程
+Ctrl + Z # 挂起进程
+```
+
+### 目录管理
+
+```bash
+mkdir # 创建目录
+mkdir -p # 递归创建目录
+
+rm -rf # 删除目录
+rmdir # 删除空目录
+
+/proc # 进程信息相关的伪文件系统
+```
+
+### 网络调试
+
+```bash
+# 查看 ARP 地址表
+ip neigh show
+
+# 查看路由表
+ip route
+```
+
+### 其他
+
+```bash
+# 查看当前操作终端用户的身份以及所属群组
+id
+
+# 查看当前 Ubuntu 系统发行版本
+lsb_release -a
+
+# 升级系统版本
+do-release-upgrade
+
+# 查看当前 shell 环境中已定义的别名有哪些
+alias
+
+# sudo 只能对可执行程序提升权限，不能对 bash 的内置函数操作
+# 可使用的检查方式
+type
+command -v
+```
+
+#### su, sudo and bash
+
+- `su`（Switch User）用于切换到另一个用户，甚至可以不使用参数切换到 root 用户。使用`su`切换用户需要输入要切换到的用户的密码
+- 使用`sudo`可以以 root 权限执行一条命令，但与`su`不同的是`sudo`需要当前用户的密码
+  - 输入密码后，系统会保留 15 分钟，并不需要每次都输入密码
+- `bash`是与计算机交互的文本界面
+  - 登录 shell：以指定的用户身份登录，需要用户名和密码
+  - 非登录 shell：在不登录的情况下可以使用的 shell，这是当前登录用户所必需的
+  - 交互式 shell 和非交互式 shell
+- `sudo su -`
+  - `-`也可写作`-l`或`--login`，模拟一个完整的登录 shell，`~/.profile`和`~/.bashrc`都会执行<br>
+![~/.profile](img/login.jpg)
+  - 使用`sudo su -`切换到 root 用户后，目录变为 root 用户的 home 目录<br>
+![当前目录变化](img/path-changed.jpg)
+- `sudo su`，bash 将作为交互式非登录 shell，此时只执行`~/.bashrc`<br>
+![~/.bashrc 用于非登录 shell](img/non-login.jpg)
+  - 使用`sudo su`切换到 root 用户后，当前目录不会发生变化<br>
+![当前目录未发生变化](img/path-unchanged.jpg)
+- `sudo bash`，以 root 权限执行命令`bash`。`/bin/bash`作为非登录 shell 启动，所有隐藏文件都不执行，但 bash 本身要读取调用用户的`.bashrc`
+  - 使用`sudo bash`切换到 root 用户后，环境不会发生变化，身份为 root 用户，但是家目录仍是原用户<br>
+![家目录不变](img/home-unchanged.jpg)
+
 ## 参考资料
 
+- [linux-2019-jckling - 0x02](https://github.com/CUCCS/linux-2019-jckling/tree/master/0x02)
 - [Asciinema - Getting started](https://asciinema.org/docs/getting-started)
 - [Vim documentation: intro](http://vimdoc.sourceforge.net/htmldoc/intro.html#vim-modes-intro)
 - [Repeating characters in VIM insert mode](https://stackoverflow.com/questions/5054128/repeating-characters-in-vim-insert-mode)
+- [How to tell the difference between apt-get upgrade, apt-get dist-upgrade, and do-release-upgrade](https://www.techrepublic.com/article/how-to-tell-the-difference-between-apt-get-upgrade-apt-get-dist-upgrade-and-do-release-upgrade/)
+- ['sudo su -' vs 'sudo -i' vs 'sudo /bin/bash' - when does it matter which is used, or does it matter at all?](https://askubuntu.com/questions/376199/sudo-su-vs-sudo-i-vs-sudo-bin-bash-when-does-it-matter-which-is-used)
