@@ -48,10 +48,10 @@ top_100_urls() {
 }
 
 status_code() {
-    sc=($(cut web_log.tsv -f 6))
+    mapfile -t sc < <(cut web_log.tsv -f 6)
     unset "sc[0]"
     total=${#sc[@]}
-    codes=($(echo "${sc[*]}" | tr ' ' '\n' | sort -u))
+    mapfile -t codes < <(echo "${sc[*]}" | tr ' ' '\n' | sort -u)
     echo "Status Codes Analysis Result:"
     printf "Status Code\tNum\tNum/Total\n---------------------------------\n"
     for c in "${codes[@]}";do
@@ -63,7 +63,7 @@ status_code() {
 }
 
 scode_4xx() {
-    fours=($(cut web_log.tsv -f 6 | grep -P "\b4" | sort -u))
+    mapfile -t fours < <(cut web_log.tsv -f 6 | grep -P "\b4" | sort -u)
     for four in "${fours[@]}";do
         echo -e "\nTOP 10 URLS for Status Code $four:"
         # "^\S+\s+$four\b" 只匹配第二列的状态码

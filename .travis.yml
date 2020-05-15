@@ -5,7 +5,7 @@ before_install:
     - sudo apt-get install -y shellcheck p7zip-full
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z
-    - wget https://github.com/jian-li/essay/blob/master/fonts/Deng.ttf
+    - wget https://github.com/20LinuxManagement/assignment-01-YanhuiJessica/tree/master/assignment-0x04/font/Deng.ttf
     - 7z x web_log.tsv.7z
 
 script:
@@ -14,7 +14,7 @@ script:
     - bash assignment-0x04/code/imgProcessor.sh -q 50 assignment-0x04/shell-test/singleopt/jpgtest.jpg
     - bash assignment-0x04/code/imgProcessor.sh -p "tmp-" assignment-0x04/shell-test/singleopt/pngtest.png
     - bash assignment-0x04/code/imgProcessor.sh -r 80 assignment-0x04/shell-test/singleopt/pngtest.png
-    - bash assignment-0x04/code/imgProcessor.sh -d "watermark" assignment-0x04/shell-test/singleopt/tmp-pngtest.png
+    - bash assignment-0x04/code/imgProcessor.sh -d "WaterMark" assignment-0x04/shell-test/singleopt/tmp-pngtest.png
     - bash assignment-0x04/code/imgProcessor.sh -j assignment-0x04/shell-test/singleopt/tmp-pngtest.png
     - ls -l assignment-0x04/shell-test/singleopt
     - ls -l assignment-0x04/shell-test

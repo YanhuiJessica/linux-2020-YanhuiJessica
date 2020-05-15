@@ -53,10 +53,10 @@ path_check() {
 
 file_deal() {
     files=$(ls "$1")
-    dir="${$1%/*}/"
+    dir="${1%/*}/"
     for f in $files
     do
-        file="${$f##*/}"
+        file="${f##*/}"
         if [[ $file == "$f" ]];then
             f="$dir$f"
         fi
@@ -81,9 +81,9 @@ file_deal() {
             args="$args -fill gray -pointsize 40 -gravity center -font Deng.ttf -draw \"text 0,0 '$4'\""
         fi
         # 去除扩展名
-        filename="${$file%.*}"
+        filename="${file%.*}"
         # 原扩展名
-        extend="${$file##*.}"
+        extend="${file##*.}"
         if [[ $9 ]];then filename="$9$filename";fi
         if [[ ${10} ]];then filename="$filename${10}";fi
         if [[ ! $image_flag ]];then

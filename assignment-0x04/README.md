@@ -168,6 +168,7 @@
 - [ImageMagick - Convert, Edit, or Compose Bitmap Images](https://imagemagick.org/index.php)
 - [Match specific column with grep command](https://stackoverflow.com/questions/27390292/match-specific-column-with-grep-command)
 - [Parameter Expansion](http://mywiki.wooledge.org/BashGuide/Parameters#Parameter_Expansion)
+- [SC2207](https://github.com/koalaman/shellcheck/wiki/SC2207)
 - [Travis CI User Documentation](https://docs.travis-ci.com/)
 - [Bash Functions | Linuxize](https://linuxize.com/post/bash-functions/)
 - [How do I test if a variable is a number in Bash?](https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash)
