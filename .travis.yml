@@ -1,0 +1,52 @@
+language: bash
+
+before_install:
+    - sudo apt-get update
+    - sudo apt-get install -y shellcheck p7zip-full
+    - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv
+    - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z
+    - wget https://github.com/jian-li/essay/blob/master/fonts/Deng.ttf
+    - 7z x web_log.tsv.7z
+
+script:
+    - bash assignment-0x04/code/imgProcessor.sh -h
+    - ls -l assignment-0x04/shell-test/singleopt
+    - bash assignment-0x04/code/imgProcessor.sh -q 50 assignment-0x04/shell-test/singleopt/jpgtest.jpg
+    - bash assignment-0x04/code/imgProcessor.sh -p "tmp-" assignment-0x04/shell-test/singleopt/pngtest.png
+    - bash assignment-0x04/code/imgProcessor.sh -r 80 assignment-0x04/shell-test/singleopt/pngtest.png
+    - bash assignment-0x04/code/imgProcessor.sh -d "watermark" assignment-0x04/shell-test/singleopt/tmp-pngtest.png
+    - bash assignment-0x04/code/imgProcessor.sh -j assignment-0x04/shell-test/singleopt/tmp-pngtest.png
+    - ls -l assignment-0x04/shell-test/singleopt
+    - ls -l assignment-0x04/shell-test
+    - ls -l assignment-0x04/shell-test/subdir
+    - bash assignment-0x04/code/imgProcessor.sh -ci -d "水 印" -s "-zhmark" assignment-0x04/shell-test
+    - bash assignment-0x04/code/imgProcessor.sh -o -p "overwritten-" assignment-0x04/shell-test
+    - ls -l assignment-0x04/shell-test
+    - ls -l assignment-0x04/shell-test/subdir
+    - ls -l assignment-0x04/shell-test/singleopt
+    - bash assignment-0x04/code/textBatch-1.sh -h
+    - bash assignment-0x04/code/textBatch-1.sh -i
+    - bash assignment-0x04/code/textBatch-1.sh -a
+    - bash assignment-0x04/code/textBatch-1.sh -p
+    - bash assignment-0x04/code/textBatch-1.sh -l
+    - bash assignment-0x04/code/textBatch-1.sh -e
+    - bash assignment-0x04/code/textBatch-2.sh -h
+    - bash assignment-0x04/code/textBatch-2.sh -i
+    - bash assignment-0x04/code/textBatch-2.sh -a
+    - bash assignment-0x04/code/textBatch-2.sh -p
+    - bash assignment-0x04/code/textBatch-2.sh -v
+    - bash assignment-0x04/code/textBatch-2.sh -s
+    - bash assignment-0x04/code/textBatch-2.sh -f
+    - bash assignment-0x04/code/textBatch-2.sh -u /images/
+    - bash assignment-0x04/code/textBatch-2.sh -u /icons/text.xbm
+    - bash assignment-0x04/code/get-gcd.sh 24 36
+
+after_script:
+    - shellcheck assignment-0x04/code/imgProcessor.sh
+    - shellcheck assignment-0x04/code/textBatch-1.sh
+    - shellcheck assignment-0x04/code/textBatch-2.sh
+    - shellcheck assignment-0x04/code/get-gcd.sh
+
+notifications:
+    email:
+        on_success: never
