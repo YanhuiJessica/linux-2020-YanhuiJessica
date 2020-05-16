@@ -5,8 +5,10 @@ before_install:
     - sudo apt-get install -y shellcheck p7zip-full
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z
-    - wget https://github.com/20LinuxManagement/assignment-01-YanhuiJessica/tree/master/assignment-0x04/font/Deng.ttf
     - 7z x web_log.tsv.7z
+
+install:
+    - echo -e "machine github.com\n  login ${GITHUB_TOKEN}" > ~/.netrc
 
 script:
     - bash assignment-0x04/code/imgProcessor.sh -h
@@ -46,6 +48,19 @@ after_script:
     - shellcheck assignment-0x04/code/textBatch-1.sh
     - shellcheck assignment-0x04/code/textBatch-2.sh
     - shellcheck assignment-0x04/code/get-gcd.sh
+
+after_success:
+    - git stash
+    - git checkout travis-test
+    - git init
+    - git stash pop
+    - git add assignment-0x04/shell-test/*
+    - git commit -m "Travis Test Images"
+    - git push -f origin HEAD:travis-test
+
+branches:
+    only:
+        - master
 
 notifications:
     email:
