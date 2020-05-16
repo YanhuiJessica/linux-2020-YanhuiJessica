@@ -55,10 +55,10 @@ age_num_calc() {
 }
 
 pos_analysis() {
-    postotal=($(cut worldcupplayerinfo.tsv -f 5))
+    mapfile -t postotal < <(cut worldcupplayerinfo.tsv -f 5)
     unset "postotal[0]"
     total=${#postotal[@]}
-    pos=($(echo "${postotal[*]}" | tr ' ' '\n' | sort -u))
+    mapfile -t pos < <(echo "${postotal[*]}" | tr ' ' '\n' | sort -u)
     echo "Athletes' positions analysis result:"
     printf "Position\tNum\tNum/Total\n----------------------------------\n"
     for p in "${pos[@]}";do
@@ -70,7 +70,7 @@ pos_analysis() {
 }
 
 find_name_extreme() {
-    IFS=$'\n\r' names=($(cut worldcupplayerinfo.tsv -f 9))
+    mapfile -t names < <(cut worldcupplayerinfo.tsv -f 9)
     # 删除第一行列名
     unset "names[0]"
     mi=10000
@@ -95,7 +95,7 @@ find_name_extreme() {
 
 find_age_extreme() {
     # -n 按自然数排序
-    ages=($(cut worldcupplayerinfo.tsv -f 6 | sort -nu))
+    mapfile -t ages < <(cut worldcupplayerinfo.tsv -f 6 | sort -nu)
     mi=${ages[1]}
     mx=${ages[${#ages[@]}-1]}
     echo "Smallest age: $mi"

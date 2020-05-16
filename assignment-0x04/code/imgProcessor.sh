@@ -69,6 +69,7 @@ file_deal() {
                 file_deal "$dir$file/" "$2" "$3" "$4" "$5" "$6" \
                 "$7" "$8" "$9" "${10}"
                 dir=$(echo "$1" | grep -P '.*(?=/[^/]*$)/' -o)
+                continue
             fi
         fi
         args=""
@@ -78,7 +79,8 @@ file_deal() {
         if [[ $2 && 'jpeg' == "$ftype" ]];then args="$args -quality $2";fi
         if [[ $3 && "(jpeg png gif)" =~ $ftype ]];then args="$args -resize $3%";fi
         if [[ $4 && "(jpeg png gif)" =~ $ftype ]];then
-            args="$args -fill gray -pointsize 40 -gravity center -font Deng.ttf -draw \"text 0,0 '$4'\""
+            curpath=$(pwd)
+            args="$args -fill gray -pointsize 40 -gravity center -font '$curpath/assignment-0x04/font/Deng.ttf' -draw \"text 0,0 '$4'\""
         fi
         # 去除扩展名
         filename="${file%.*}"
