@@ -90,6 +90,14 @@
   -f path
   ```
 
+### 部分处理结果
+
+- 图片添加水印操作前后（中文其实也可以加，但是 Travis 好像过滤掉了……可能没有中文字体？）：<br>
+
+  <img src="https://raw.githubusercontent.com/20LinuxManagement/assignment-01-YanhuiJessica/travis-test/assignment-0x04/shell-test/singleopt/pngtest.png" alt="添加水印前" width=350px>
+
+  <img src="https://raw.githubusercontent.com/20LinuxManagement/assignment-01-YanhuiJessica/travis-test/assignment-0x04/shell-test/singleopt/tmp-pngtest.jpg" alt="添加水印后" width=350px>
+
 ## 文本批处理
 
 - TSV 文件使用 Tab 分割，使用`cut`选出第`n`列：`cut -f n`
