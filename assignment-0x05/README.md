@@ -44,6 +44,10 @@
 - Host-Only IP：192.168.56.9
 - 用于白名单测试
 
+## 用户访问过程
+
+![访问图](img/access.jpg)
+
 ## 实验过程
 
 ### 配置本地域名解析
@@ -110,7 +114,7 @@ Windows 宿主机编辑`C:\Windows\System32\drivers\etc\hosts`文件，添加域
   cp wp-config-sample.php wp-config.php
   ```
 - 编辑`wp-config.php`文件
-  - 修改数据库信息
+  - 修改数据库信息<br>
 ![修改内容](img/db-info.jpg)
   - 添加 Security Keys
     ```bash
