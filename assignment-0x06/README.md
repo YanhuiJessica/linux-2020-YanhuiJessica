@@ -19,23 +19,18 @@
 - [x] 安装和配置 Samba 独立共享服务器
   - [x] Linux 设置匿名访问共享目录
   - [x] Linux 设置用户名密码方式的共享目录
-- [ ] Samba 服务器配置和客户端配置连接测试
-  - [ ] Linux 访问 Windows 的匿名共享目录
-  - [ ] Linux 访问 Windows 的用户名密码方式共享目录
-  - [ ] 下载整个目录
+- [x] Samba 服务器配置和客户端配置连接测试
+  - [x] Linux 访问 Windows 的匿名共享目录
+  - [x] Linux 访问 Windows 的用户名密码方式共享目录
+  - [x] 下载整个目录
 - [x] DNS
   - [x] 基于上述 Internal 网络模式连接的虚拟机实验环境，在 DHCP 服务器上配置 DNS 服务，使得另一台作为 DNS 客户端的主机可以通过该 DNS 服务器进行 DNS 查询
   - [x] 在 DNS 服务器上添加`zone "cuc.edu.cn"`的解析记录
 
 ### Shell 脚本编程基本要求
 
-- [ ] 自动安装与自动配置过程的启动脚本要求在本地执行
 - [x] 假设目标系统没有配置过 root 用户免密登录，要求在自动安装脚本中包含自动配置远程 root 用户免密登录的代码
-- [ ] 目标环境相关参数应使用独立的配置文件或配置脚本（在主调脚本中引用配置脚本）
-  - 目标服务器 IP
-  - 目标服务器 SSH 服务的端口
-  - 目标服务器上使用的用户名
-  - 目标服务器上用于临时存储安装脚本、配置文件的临时目录路径
+- [x] 目标环境相关参数应使用独立的配置文件或配置脚本（在主调脚本中引用配置脚本）
 
 ## 实验环境
 
@@ -57,6 +52,10 @@ Host-Only IP：192.168.56.1
 - [网络配置参考](https://github.com/20LinuxManagement/assignment-01-YanhuiJessica/tree/master/assignment-0x01#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE)
 
 ## 实验过程
+
+### 自动构建
+
+- 主调脚本：[build.sh](build.sh)
 
 ### 自动配置 SSH 免密登录
 
@@ -107,6 +106,52 @@ Host-Only IP：192.168.56.1
 
 ### Samba
 
+#### Windows -> Linux
+
+- Windows 启用分享，允许网络发现、文件和打印机共享<br>
+![网络和共享中心 -> 高级共享设置](img/open-share.jpg)
+  - 要实现匿名用户访问需要关闭「密码保护共享」<br>
+![关闭密码保护共享](img/close-pass.jpg)
+- 管理员命令提示符
+  ```bash
+  # 创建 Samba 用户
+  net user smbUser /add
+
+  # 设置密码为 smbpass
+  net user smbUser smbpass
+
+  # smbUser 自动添加至 Users 用户组
+  # 如未添加可通过以下命令完成
+  net localgroup Users smbUser /add
+  ```
+- 创建匿名共享目录 public，设置文件属性<br>
+![共享 -> 高级共享](img/win-public-share.jpg)
+  - 文件安全与文件共享的用户权限设置应相同，否则权限以较严格的为准
+  - 添加 Everyone<br>
+![文件属性 -> 安全](img/win-public-pro.jpg)
+- 创建以用户名密码方式访问的共享目录，设置文件属性<br>
+![共享 -> 高级共享](img/win-private-share.jpg)
+  - 对文件的权限也要进行相应的修改<br>
+![文件属性 -> 安全](img/win-private-pro.jpg)
+- Linux 访问需要安装`smbclient`：`sudo apt install smbclient`
+- 列出宿主机上的可用共享（可以不用输入密码）：`smbclient -L LAPTOP-2AHLJ65D`
+- 匿名用户和普通用户对匿名共享目录和用户名密码方式访问的共享目录的访问情况<br>
+![目录访问情况](img/win-file-access.jpg)
+- 下载整个目录
+  ```bash
+  # 递归下载
+  recurse on
+  # 关闭询问 -> 全部同意下载
+  prompt off
+  # 下载
+  mget *
+  ```
+  ![下载成功](img/win-dir-download.jpg)
+
+#### Linux -> Windows
+
+- Linux 由 [samba-server.sh](code/samba-server.sh) 自动构建分享目录
+
 #### 推荐工具
 
 - [CHMOD Calculator](https://chmodcommand.com/)
@@ -115,3 +160,5 @@ Host-Only IP：192.168.56.1
 
 - [smb.conf — The configuration file for the Samba suite](https://www.samba.org/~ab/output/htmldocs/manpages-3/smb.conf.5.html#PRINTABLE)
 - [Install and Configure Samba | Ubuntu](https://ubuntu.com/tutorials/install-and-configure-samba#1-overview)
+- [How to Share Files Between Windows and Linux](https://www.howtogeek.com/176471/how-to-share-files-between-windows-and-linux/)
+- [smbclient](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html)

@@ -32,5 +32,5 @@ chmod 2770 "$auth_path"
 config=/etc/samba/smb.conf
 bash ./backup.sh "$config" 'samba' || exit 1
 
-cp ../config/smb.conf "$config"
+cp "$CONFIG_PATH/smb.conf" "$config"
 service smbd restart
