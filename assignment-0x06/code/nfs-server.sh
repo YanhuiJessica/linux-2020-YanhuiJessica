@@ -19,6 +19,9 @@ chown nobody:nogroup "$read_write"
 config=/etc/exports
 bash ./backup.sh "$config" 'nfs-kernel-server' || exit 1
 
-cp ../config/nfs-server.conf /etc/exports
+cat > /etc/exports << EOF
+/var/nfs/general_read   $WORKER_IP(ro,sync,no_subtree_check)
+/var/nfs/general_rw     $WORKER_IP(rw,sync,no_subtree_check)
+EOF
 
 systemctl restart nfs-kernel-server

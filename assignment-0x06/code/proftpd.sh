@@ -40,6 +40,6 @@ config=/etc/proftpd/proftpd.conf
 bash ./backup.sh "$config" 'proftpd' || exit 1
 
 # 当前配置文件可能不是示例文件，所以选择直接写入覆盖
-cp ../config/proftpd.conf /etc/proftpd/proftpd.conf
+cp "$CONFIG_PATH/proftpd.conf" /etc/proftpd/proftpd.conf
 
 service proftpd restart

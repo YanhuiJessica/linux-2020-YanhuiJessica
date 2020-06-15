@@ -15,7 +15,7 @@ fi
 
 read_only=/var/nfs/general_read
 read_write=/var/nfs/general_rw
-srv_ip=192.168.56.21
+srv_ip="$TARGET_IP"
 
 sudo mount "$srv_ip:$read_only" "$ro"
 sudo mount "$srv_ip:$read_write" "$rw"
