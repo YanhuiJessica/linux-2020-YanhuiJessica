@@ -2,13 +2,13 @@
 
 if ! [[ $(command -v named) ]]; then
     echo "bind9 is uninstalled. Installing..."
-    apt install bind9 -y || echo "Failed to install bind9. Exiting..."; exit 1
+    apt install bind9 -y || { echo "Failed to install bind9. Exiting..."; exit 1; }
 fi
 
 named_option=/etc/bind/named.conf.options
 named_local=/etc/bind/named.conf.local
 
-bash ./backup.sh "$named_option" 'named.conf.options' || exit 1
+bash "$CODE_PATH/backup.sh" "$named_option" 'named.conf.options' || exit 1
 cat > "$named_option" << EOF
 acl "allowed" {
     192.168.233.0/24;
@@ -28,7 +28,7 @@ options {
 };
 EOF
 
-bash ./backup.sh "$named_local" 'named.conf.local' || exit 1
+bash "$CODE_PATH/backup.sh" "$named_local" 'named.conf.local' || exit 1
 cat > "$named_local" << EOF
 zone "cuc.edu.cn" IN {
     type master;
@@ -37,7 +37,7 @@ zone "cuc.edu.cn" IN {
 EOF
 
 cuc_conf=/var/cache/bind/cuc.edu.cn.db
-bash ./backup.sh "$cuc_conf" 'cuc.edu.cn' || exit 1
+bash "$CODE_PATH/backup.sh" "$cuc_conf" 'cuc.edu.cn' || exit 1
 cat > "$cuc_conf" << EOF
 $TTL    86400
 @       IN      SOA     ns.cuc.edu.cn. root.cuc.edu.cn. (
