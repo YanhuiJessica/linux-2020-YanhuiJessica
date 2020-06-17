@@ -56,6 +56,11 @@ Host-Only IP：192.168.56.1
 ### 自动构建
 
 - 主调脚本：[build.sh](build.sh)
+- 运行：`bash autobuild/build.sh`
+
+#### 完整过程（含部分搭建后的测试）
+
+<a href="https://asciinema.org/a/IYHDP2rRIdsOH3VhZdipUUxy9" target="_blank"><img src="https://asciinema.org/a/IYHDP2rRIdsOH3VhZdipUUxy9.svg" width=600px/></a>
 
 ### 自动配置 SSH 免密登录
 
@@ -72,6 +77,24 @@ Host-Only IP：192.168.56.1
 ### FTP
 
 - `code`文件夹下包含 vsftpd 的自动配置脚本 [vsftpd.sh](code/vsftpd.sh)，但由于 vsftpd 无法针对特定用户进行 IP 地址过滤，因此不做进一步考虑
+- 不能越权访问重点在于如何指定根目录
+- 配置脚本：[proftpd.sh](code/proftpd.sh) / 配置文件：[proftpd.conf](config/proftpd.conf)
+
+#### 匿名访问目录
+
+- 匿名访问者可以访问 1 个目录且仅拥有该目录及其所有子目录的只读访问权限<br>
+![匿名用户访问情况](img/ftp-anon.jpg)
+- 无法使用匿名用户账户名登录，只能使用别名`anonymous`<br>
+![anonftp 登录失败](img/no-anonftp.jpg)
+- 宿主机不在白名单内，无法使用匿名账户<br>
+![禁止非白名单 IP 访问](img/anon-filter.jpg)
+
+#### 虚拟用户
+
+- 继承匿名访问者所有权限，且拥有对另 1 个独立目录及其子目录完整读写权限<br>
+![虚拟用户访问情况](img/ftp-vuser.jpg)
+- 虚拟用户仅作为 proftpd 用户使用，shell 中无法使用<br>
+![用户不存在](img/proftpuser.jpg)
 
 #### 参考资料
 
@@ -83,8 +106,20 @@ Host-Only IP：192.168.56.1
 - [How to Set Up Anonymous FTP with ProFTP](https://delightlylinux.wordpress.com/2017/06/10/how-to-set-up-anonymous-ftp-with-proftp/)
 - [htaccess “order” Deny, Allow, Deny](https://stackoverflow.com/questions/9943042/htaccess-order-deny-allow-deny)
 - [Configuring ProFTPd with virtual users in a file](https://ixnfo.com/en/configuring-proftpd-with-virtual-users-in-a-file.html#comments)
+- [ProFTPd, MySQL, virtual users and permissions](https://serverfault.com/questions/325913/proftpd-mysql-virtual-users-and-permissions)
 
 ### NFS
+
+- 只读目录和读写目录及其子目录，显示的属主、权限信息相同<br>
+![nobody:nogroup](img/nfs-ro-rw.jpg)
+- 只读目录无法创建文件<br>
+![touch 文件失败](img/general-read.jpg)
+- 在客户端，读写目录只能以 root 用户权限创建目录和文件，创建后属主为`nobody:nogroup`<br>
+![客户端创建目录和文件](img/general-rw.jpg)
+- 在服务器端查看共享目录中文件、子目录的属主、权限信息与客户端一致<br>
+![属主、权限信息一致](img/nfs-same-owner.jpg)
+- 默认情况下，NFS 会将远程 root 用户转换为服务器端的普通用户，以防止客户端的 root 用户将服务器文件系统作为根目录，`no_root_squash`选项会禁用这一特性，这样客户端创建文件的属主就是 root<br>
+![属主为 root 用户](img/no-root-squash.jpg)
 
 #### 参考资料
 
