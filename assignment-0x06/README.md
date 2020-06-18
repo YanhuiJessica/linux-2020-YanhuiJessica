@@ -40,13 +40,13 @@ Host-Only IP：192.168.56.1
 
 ### 工作主机 - AC-Server
 
-- 网卡配置：NAT 网络、Host-Only、内部网络（intnet）
+- 网卡配置：NAT 网络、Host-Only、内部网络（intnet）<br>
 ![网卡配置](img/server-adapter.jpg)
 - Host-Only IP：192.168.56.13
 
 ### 目标主机 - AC-Target
 
-- 网卡配置：NAT 网络、Host-Only、内部网络（intnet）
+- 网卡配置：NAT 网络、Host-Only、内部网络（intnet）<br>
 ![网卡配置](img/target-adapter.jpg)
 - Host-Only IP: 192.168.56.21
 - [网络配置参考](https://github.com/20LinuxManagement/assignment-01-YanhuiJessica/tree/master/assignment-0x01#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE)
@@ -127,11 +127,18 @@ Host-Only IP：192.168.56.1
 
 ### DHCP
 
+- 自动配置前<br>
+![没有 IP 地址](img/dhcp-before.jpg)
+- 自动配置结束后<br>
+![获取到了 IP 地址](img/dhcp-after.jpg)
+
 #### 参考资料
 
 - [isc-dhcp-server](https://help.ubuntu.com/community/isc-dhcp-server)
 
 ### DNS
+
+![dig 结果](img/wp.sec.jpg)
 
 #### 参考资料
 
@@ -186,6 +193,14 @@ Host-Only IP：192.168.56.1
 #### Linux -> Windows
 
 - Linux 由 [samba-server.sh](code/samba-server.sh) 自动构建分享目录
+- Windows 上右键 -> 新建快捷方式，输入`\\192.168.56.21\pub-share`即可挂载匿名用户目录，用户名密码方式共享目录同理：`\\192.168.56.21\private-share`
+
+#### Trouble-Shooting
+
+![错误信息](img/multiple-deny.jpg)
+
+- 最简单的方法是删除之前挂载的目录
+- 打开 cmd（管理员命令行输入`net use`可能返回列表为空），输入`net use /delete \\192.168.56.21\pub-share`即可删除
 
 #### 推荐工具
 
@@ -197,3 +212,4 @@ Host-Only IP：192.168.56.1
 - [Install and Configure Samba | Ubuntu](https://ubuntu.com/tutorials/install-and-configure-samba#1-overview)
 - [How to Share Files Between Windows and Linux](https://www.howtogeek.com/176471/how-to-share-files-between-windows-and-linux/)
 - [smbclient](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html)
+- [Windows: Fix ‘Multiple connections to a server or shared resource by the same user’ Error](https://www.technipages.com/fix-multiple-connections-to-a-server-or-shared-resource-by-the-same-user-error)
