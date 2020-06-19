@@ -94,9 +94,9 @@
 
 - 图片添加水印操作前后（中文其实也可以加，但是 Travis 好像过滤掉了……可能没有中文字体？）：<br>
 
-  <img src="https://raw.githubusercontent.com/20LinuxManagement/assignment-01-YanhuiJessica/travis-test/assignment-0x04/shell-test/singleopt/pngtest.png" alt="添加水印前" width=350px>
+  <img src="https://raw.githubusercontent.com/20LinuxManagement/assignment-YanhuiJessica/travis-test/assignment-0x04/shell-test/singleopt/pngtest.png?token=AMTTBKFI7YSSRLGA5QPUNF265RO2M" alt="添加水印前" width=350px>
 
-  <img src="https://raw.githubusercontent.com/20LinuxManagement/assignment-01-YanhuiJessica/travis-test/assignment-0x04/shell-test/singleopt/tmp-pngtest.jpg" alt="添加水印后" width=350px>
+  <img src="https://raw.githubusercontent.com/20LinuxManagement/assignment-YanhuiJessica/travis-test/assignment-0x04/shell-test/singleopt/tmp-pngtest.jpg?token=AMTTBKB7S5WLX447JDEIG6C65RO7E" alt="添加水印后" width=350px>
 
 ## 文本批处理
 
