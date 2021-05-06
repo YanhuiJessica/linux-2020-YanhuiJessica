@@ -462,7 +462,7 @@
   - shebang 一定要在文件开头：[OSError: [Errno 8] Exec format error](https://stackoverflow.com/questions/27606653/oserror-errno-8-exec-format-error)
 - 使用`sudo chmod +x <filename>`为上述脚本文件添加可执行权限
 - `networkd-dispatcher`服务需要是 active 状态才会执行脚本：`systemctl start networkd-dispatcher.service`
-- 操作录像<br>：
+- 操作录像：<br>
 
   <a href="https://asciinema.org/a/7gjRizNm3GAEaI0doV4g6xfhf" target="_blank"><img src="https://asciinema.org/a/7gjRizNm3GAEaI0doV4g6xfhf.svg" width=500px/></a>
 - 参考：https://asciinema.org/a/ND40x8WroOoDwjP2BWiR3ojLI
