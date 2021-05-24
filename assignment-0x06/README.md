@@ -55,7 +55,7 @@ Host-Only IP：192.168.56.1
 
 ### 自动构建
 
-- 主调脚本：[build.sh](build.sh)
+- 主调脚本：[build.sh](autobuild/build.sh)
 - 运行：`bash autobuild/build.sh`
 
 #### 完整过程（含部分搭建后的测试）
@@ -72,13 +72,13 @@ Host-Only IP：192.168.56.1
   # 允许 root 用户登录
   PermitRootLogin yes
   ```
-- 余下配置由 [nopassh.sh](code/nopassh.sh) 完成
+- 余下配置由 [nopassh.sh](autobuild/code/nopassh.sh) 完成
 
 ### FTP
 
-- `code`文件夹下包含 vsftpd 的自动配置脚本 [vsftpd.sh](code/vsftpd.sh)，但由于 vsftpd 无法针对特定用户进行 IP 地址过滤，因此不做进一步考虑
+- `code`文件夹下包含 vsftpd 的自动配置脚本 [vsftpd.sh](autobuild/code/vsftpd.sh)，但由于 vsftpd 无法针对特定用户进行 IP 地址过滤，因此不做进一步考虑
 - 不能越权访问重点在于如何指定根目录
-- 配置脚本：[proftpd.sh](code/proftpd.sh) / 配置文件：[proftpd.conf](config/proftpd.conf)
+- 配置脚本：[proftpd.sh](autobuild/code/proftpd.sh) / 配置文件：[proftpd.conf](autobuild/config/proftpd.conf)
 
 #### 匿名访问目录
 
@@ -192,7 +192,7 @@ Host-Only IP：192.168.56.1
 
 #### Linux -> Windows
 
-- Linux 由 [samba-server.sh](code/samba-server.sh) 自动构建分享目录
+- Linux 由 [samba-server.sh](autobuild/code/samba-server.sh) 自动构建分享目录
 - Windows 上右键 -> 新建快捷方式，输入`\\192.168.56.21\pub-share`即可挂载匿名用户目录，用户名密码方式共享目录同理：`\\192.168.56.21\private-share`
 
 #### Trouble-Shooting
