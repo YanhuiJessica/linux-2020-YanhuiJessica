@@ -15,7 +15,9 @@ script:
     - ls -l assignment-0x04/shell-test/singleopt
     - bash assignment-0x04/code/imgProcessor.sh -q 50 assignment-0x04/shell-test/singleopt/jpgtest.jpg
     - bash assignment-0x04/code/imgProcessor.sh -p "tmp-" assignment-0x04/shell-test/singleopt/pngtest.png
+    - identify -format "%wx%h\n" assignment-0x04/shell-test/singleopt/pngtest.png
     - bash assignment-0x04/code/imgProcessor.sh -r 80 assignment-0x04/shell-test/singleopt/pngtest.png
+    - identify -format "%wx%h\n" assignment-0x04/shell-test/singleopt/pngtest.png
     - bash assignment-0x04/code/imgProcessor.sh -d "WaterMark" assignment-0x04/shell-test/singleopt/tmp-pngtest.png
     - bash assignment-0x04/code/imgProcessor.sh -j assignment-0x04/shell-test/singleopt/tmp-pngtest.png
     - ls -l assignment-0x04/shell-test/singleopt
