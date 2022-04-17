@@ -2,7 +2,7 @@ language: bash
 
 before_install:
     - sudo apt-get update
-    - sudo apt-get install -y shellcheck p7zip-full librsvg2-bin
+    - sudo apt-get install -y shellcheck p7zip-full librsvg2-bin xdg-utils
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z
     - 7z x web_log.tsv.7z
