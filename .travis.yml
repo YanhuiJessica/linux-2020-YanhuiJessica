@@ -2,7 +2,7 @@ language: bash
 
 before_install:
     - sudo apt-get update
-    - sudo apt-get install -y shellcheck p7zip-full
+    - sudo apt-get install -y shellcheck p7zip-full librsvg2-bin
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z
     - 7z x web_log.tsv.7z
@@ -15,9 +15,9 @@ script:
     - ls -l assignment-0x04/shell-test/singleopt
     - bash assignment-0x04/code/imgProcessor.sh -q 50 assignment-0x04/shell-test/singleopt/jpgtest.jpg
     - bash assignment-0x04/code/imgProcessor.sh -p "tmp-" assignment-0x04/shell-test/singleopt/pngtest.png
-    - identify -format "%wx%h\n" assignment-0x04/shell-test/singleopt/pngtest.png
-    - bash assignment-0x04/code/imgProcessor.sh -r 80 assignment-0x04/shell-test/singleopt/pngtest.png
-    - identify -format "%wx%h\n" assignment-0x04/shell-test/singleopt/pngtest.png
+    - identify -format "%f:%wx%h\n" assignment-0x04/shell-test/singleopt/pngtest.png assignment-0x04/shell-test/singleopt/jpgtest.jpg assignment-0x04/shell-test/singleopt/svgtest.svg
+    - bash assignment-0x04/code/imgProcessor.sh -r 80 assignment-0x04/shell-test/singleopt/
+    - identify -format "%f:%wx%h\n" assignment-0x04/shell-test/singleopt/pngtest.png assignment-0x04/shell-test/singleopt/jpgtest.jpg assignment-0x04/shell-test/singleopt/svgtest.svg
     - bash assignment-0x04/code/imgProcessor.sh -d "WaterMark" assignment-0x04/shell-test/singleopt/tmp-pngtest.png
     - bash assignment-0x04/code/imgProcessor.sh -j assignment-0x04/shell-test/singleopt/tmp-pngtest.png
     - ls -l assignment-0x04/shell-test/singleopt

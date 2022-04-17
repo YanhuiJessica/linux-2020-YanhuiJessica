@@ -14,14 +14,14 @@ usage() {
     -q value    JPEG quality compression, value range from
                 1 (lowest image quality and highest compression) to
                 100 (best quality but least effective compression)
-    -r value    resize image (JPEG/PNG/GIF) by scale, the value should be
+    -r value    resize image (JPEG/PNG/SVG/GIF) by scale, the value should be
                 an integer and will be converted to percentage in operation
     -d string   draw text watermark in image's center (only support JPEG/PNG/GIF)
     -j          convert image format from png/svg to jpg
 
     Filename Settings:
     -o          overwrite the original file. If option (p | s) not set,
-                the original image file will still be possible to overwritten
+                the original image file will still be possible to be overwritten
                 whatever this option set or not
     -c          deal directories and their files recursively
     -i          only deal with image (JPEG/PNG/GIF/SVG) filename(s)
@@ -73,11 +73,18 @@ file_deal() {
             fi
         fi
         args=""
+        svgargs=""
         ftype=$(file --mime-type "$f" | grep -P '(?=[^/]*$).*' -o)
-        image_flag=$(if [[ "(jpeg png svg gif)" =~ $ftype ]];then echo "true";fi)
+        image_flag=$(if [[ "(jpeg png gif)" =~ $ftype ]];then echo "true";fi)   # svg 不作为 convert 的图片处理
         if [[ ! $image_flag && $8 ]];then continue;fi
         if [[ $2 && 'jpeg' == "$ftype" ]];then args="$args -quality $2";fi
-        if [[ $3 && "(jpeg png gif)" =~ $ftype ]];then args="$args -resize $3%";fi
+        if [[ $3 ]];then
+            if [[ "(jpeg png gif)" =~ $ftype ]];then
+                args="$args -resize $3%";
+            elif [[ 'svg+xml' == "$ftype" ]];then
+                svgargs="rsvg-convert -z 0$(echo "scale=2; $3/100" | bc -l) -f svg";
+            fi
+        fi
         if [[ $4 && "(jpeg png gif)" =~ $ftype ]];then
             curpath=$(pwd)
             args="$args -fill gray -pointsize 40 -gravity center -font '$curpath/assignment-0x04/font/Deng.ttf' -draw \"text 0,0 '$4'\""
@@ -89,9 +96,24 @@ file_deal() {
         if [[ $9 ]];then filename="$9$filename";fi
         if [[ ${10} ]];then filename="$filename${10}";fi
         if [[ ! $image_flag ]];then
-            if [[ $file != "$filename" ]];then
-                if [[ $6 ]];then eval "mv $dir$file $dir$filename.$extend"
-                else eval "cp $dir$file $dir$filename.$extend";fi
+            if [[ $file != "$filename.$extend" ]];then
+                if [[ "$svgargs" ]];then
+                    cmd="$svgargs $dir$file -o $dir$filename.$extend"
+                    if [[ $5 ]];then cmd="$cmd && convert $dir$filename.$extend $dir$filename.jpg";fi
+                    if [[ $6 ]];then eval "rm $dir$file";fi
+                else
+                    if [[ $6 ]];then eval "mv $dir$file $dir$filename.$extend"
+                    else eval "cp $dir$file $dir$filename.$extend";fi
+                fi
+            elif [[ "$svgargs" ]];then
+                cmd="$svgargs $dir$file -o $dir$filename.new.$extend"
+                if [[ $5 ]];then
+                    eval "$cmd && convert $dir$filename.new.$extend $dir$filename.jpg"
+                    if [[ $6 ]];then rm "$dir$file";fi
+                    rm "$dir$filename.new.$extend"
+                else
+                    eval "$cmd && mv $dir$filename.new.$extend $dir$file"
+                fi
             fi
         else
             cmd="convert $args $dir$file"

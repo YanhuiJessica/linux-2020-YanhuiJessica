@@ -55,6 +55,16 @@
   ```
 - 文件格式转换：`convert <imgname.type1> <imgname.type2>`
 
+### SVG 格式图像压缩分辨率
+
+- ImageMagick 主要处理点阵图（raster image），而 SVG 为矢量图格式
+- 比较简单的方法是直接修改 SVG 文件长、宽的值，也可以借助工具 `rsvg-convert` / `inkscape`
+
+#### 参考资料
+
+- [Blank SVGs generated · Issue #1846 · ImageMagick/ImageMagick](https://github.com/ImageMagick/ImageMagick/issues/1846)
+- [How can I scale an SVG via command line? - Super User](https://superuser.com/questions/475851/how-can-i-scale-an-svg-via-command-line)
+
 ### 文件处理
 
 - 添加文件名前缀或后缀
