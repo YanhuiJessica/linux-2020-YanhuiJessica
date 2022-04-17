@@ -75,7 +75,6 @@ file_deal() {
         args=""
         svgargs=""
         ftype=$(file --mime-type "$f" | grep -P '(?=[^/]*$).*' -o)
-        echo "$ftype"
         image_flag=$(if [[ "(jpeg png gif)" =~ $ftype ]];then echo "true";fi)   # svg 不作为 convert 的图片处理
         if [[ ! $image_flag && $8 ]];then continue;fi
         if [[ $2 && 'jpeg' == "$ftype" ]];then args="$args -quality $2";fi
