@@ -59,7 +59,7 @@ after_success:
     - git stash pop
     - git add assignment-0x04/shell-test/*
     - git commit -m "Travis Test Images"
-    - git push -f https://${GITHUB_TOKEN}@github.com/YanhuiJessica/linux-2020-YanhuiJessica travis-test
+    - git push -f https://${GITHUB_TOKEN}@github.com/YanhuiJessica/linux-2020-YanhuiJessica origin HEAD:travis-test
 
 branches:
     only:
