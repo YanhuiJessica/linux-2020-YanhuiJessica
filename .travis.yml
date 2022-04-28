@@ -7,9 +7,7 @@ before_install:
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv
     - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z
     - 7z x web_log.tsv.7z
-
-install:
-    - echo -e "machine github.com\n login ${GITHUB_TOKEN}" > ~/.netrc
+    - echo -e "machine github.com\n  login ${GITHUB_TOKEN}" > ~/.netrc
 
 script:
     - bash assignment-0x04/code/imgProcessor.sh -h
@@ -59,7 +57,7 @@ after_success:
     - git stash pop
     - git add assignment-0x04/shell-test/*
     - git commit -m "Travis Test Images"
-    - git push -f https://${GITHUB_TOKEN}@github.com/YanhuiJessica/linux-2020-YanhuiJessica origin HEAD:travis-test
+    - git push -f origin HEAD:travis-test
 
 branches:
     only:
